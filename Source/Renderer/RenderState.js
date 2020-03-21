@@ -7,6 +7,8 @@ import WebGLConstants from '../Core/WebGLConstants.js';
 import WindingOrder from '../Core/WindingOrder.js';
 import ContextLimits from './ContextLimits.js';
 import freezeRenderState from './freezeRenderState.js';
+import ExpandBySwsk from '../Swsk/ExpandBySwsk';
+
 
     function validateBlendEquation(blendEquation) {
         return ((blendEquation === WebGLConstants.FUNC_ADD) ||
@@ -485,7 +487,7 @@ import freezeRenderState from './freezeRenderState.js';
 
     function applyCull(gl, renderState) {
         var cull = renderState.cull;
-        var enabled = cull.enabled;
+        var enabled = defaultValue(ExpandBySwsk.underEarth.cullFace, cull.enabled);
 
         enableOrDisable(gl, gl.CULL_FACE, enabled);
 

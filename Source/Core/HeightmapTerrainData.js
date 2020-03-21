@@ -209,6 +209,7 @@ import TerrainProvider from './TerrainProvider.js';
         var levelZeroMaxError = TerrainProvider.getEstimatedLevelZeroGeometricErrorForAHeightmap(ellipsoid, this._width, tilingScheme.getNumberOfXTilesAtLevel(0));
         var thisLevelMaxError = levelZeroMaxError / (1 << level);
         this._skirtHeight = Math.min(thisLevelMaxError * 4.0, 1000.0);
+        this._skirtHeight = 0;
 
         var verticesPromise = taskProcessor.scheduleTask({
             heightmap : this._buffer,

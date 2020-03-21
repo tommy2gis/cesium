@@ -272,6 +272,10 @@ import TerrainMesh from './TerrainMesh.js';
         var rectangle = tilingScheme.tileXYToRectangle(x, y, level);
         exaggeration = defaultValue(exaggeration, 1.0);
 
+        this._westSkirtHeight=0;
+        this._southSkirtHeight=0;
+        this._eastSkirtHeight=0;
+        this._northSkirtHeight=0;
         var verticesPromise = createMeshTaskProcessor.scheduleTask({
             minimumHeight : this._minimumHeight,
             maximumHeight : this._maximumHeight,

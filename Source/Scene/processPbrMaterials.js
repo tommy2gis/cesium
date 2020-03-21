@@ -7,6 +7,7 @@ import ForEach from '../ThirdParty/GltfPipeline/ForEach.js';
 import hasExtension from '../ThirdParty/GltfPipeline/hasExtension.js';
 import numberOfComponentsForType from '../ThirdParty/GltfPipeline/numberOfComponentsForType.js';
 import ModelUtility from './ModelUtility.js';
+import ExpandBySwsk from '../Swsk/ExpandBySwsk';
 
     /**
      * @private
@@ -867,6 +868,20 @@ import ModelUtility from './ModelUtility.js';
         } else {
             fragmentShader += '    gl_FragColor = vec4(color, 1.0);\n';
         }
+
+        if(ExpandBySwsk.ModeSparkEffect){
+            fragmentShader +="  float stc_pl =fract(czm_frameNumber / 120.0) * 3.14159265 * 2.0;\n\
+            float stc_sd = v_stcVertex.z / 100.0 + sin(stc_pl) * 0.1;\n\
+            gl_FragColor *= vec4(stc_sd, stc_sd, stc_sd, 1.0);\n\
+            float stc_a13 = fract(czm_frameNumber / 360.0);\n\
+            float stc_h = clamp(v_stcVertex.z / 100.0, 0.0, 1.0);\n\
+            stc_a13 = abs(stc_a13 - 0.5) * 2.0;\n\
+            float stc_diff = step(0.005, abs(stc_h - stc_a13));\n\
+            float stc_diff1 = step(0.005, abs(stc_h - stc_a13));\n\
+            gl_FragColor.rgb += gl_FragColor.rgb * (1.0 - stc_diff);\n\
+            ";
+        }
+
 
         fragmentShader += '}\n';
 
