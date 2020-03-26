@@ -173,7 +173,25 @@
                         ]),
                         outline: false,
                         shape: computeCircle(0.5),
-                        material: Cesium.Color.RED
+                        material: Cesium.Color.YELLOWGREEN
+                    }
+                });
+            });
+
+            rqline.features.forEach(fea => {
+                viewer.entities.add({
+                    polylineVolume: {
+                        positions: Cesium.Cartesian3.fromDegreesArrayHeights([
+                            fea.geometry.coordinates[0][0][0],
+                            fea.geometry.coordinates[0][0][1],
+                            -fea.properties["起点高"],
+                            fea.geometry.coordinates[0][1][0],
+                            fea.geometry.coordinates[0][1][1],
+                            -fea.properties["终点高"]
+                        ]),
+                        outline: false,
+                        shape: computeCircle(0.5),
+                        material: Cesium.Color.MEDIUMTURQUOISE
                     }
                 });
             });
@@ -182,16 +200,23 @@
             gdpoint.features.forEach(fea => {
                 viewer.entities.add({
                 position : Cesium.Cartesian3.fromDegrees(fea.geometry.coordinates[0], fea.geometry.coordinates[1],-fea.properties["HIGH"]+1),
-                // box : {
-                //     dimensions : new Cesium.Cartesian3(1, 1, 1),
-                //     outline : false,
-                //     material : Cesium.Color.WHITE
-                // }
                 cylinder : {
                     length : 2.0,
                     topRadius : 1.0,//圆柱体的顶部半径。
                     bottomRadius : 1.0,//    圆柱体底部的半径。
-                    material : Cesium.Color.WHITE
+                    material : Cesium.Color.THISTLE
+                }
+            });
+            });
+
+            rqpoint.features.forEach(fea => {
+                viewer.entities.add({
+                position : Cesium.Cartesian3.fromDegrees(fea.geometry.coordinates[0], fea.geometry.coordinates[1],-fea.properties["HIGH"]+1),
+                cylinder : {
+                    length : 2.0,
+                    topRadius : 1.0,//圆柱体的顶部半径。
+                    bottomRadius : 1.0,//    圆柱体底部的半径。
+                    material : Cesium.Color.SANDYBROWN
                 }
             });
             });
@@ -275,7 +300,7 @@
 
 
             var myStyle = new Cesium.Cesium3DTileStyle({
-                color: "color('#FFFFFF', 0.1)", //white, alpha = 0.2
+                color: "color('#FFFFFF', 0.06)", //white, alpha = 0.2
                 show: true
             });
 
