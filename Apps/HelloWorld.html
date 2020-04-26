@@ -13,6 +13,8 @@
         <title>Hello World!</title>
         <script src="../Build/Cesium/Cesium.js"></script>
         <script src="plugin/TerrainClipPlan.js"></script>
+        <script src="plugin/pointhtml.js"></script>
+
         <script src="line.js"></script>
         <script src="point.js"></script>
         <style>
@@ -26,16 +28,59 @@
                 padding: 0;
                 overflow: hidden;
             }
+            .divpoint2 {
+                top: -1000px;
+                left: -1000px;
+                width: 200px;
+                height: 157px;
+                background: rgba(42, 42, 42, 0.8);
+                border-radius: 4px;
+                position: absolute;
+                background: url(./div.2c451d69.png);
+                background-size: 100%;
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                -o-background-size: cover;
+                animation: mymove 5s infinite;
+                animation-duration: 5s;
+                animation-timing-function: ease;
+                animation-delay: 0s;
+                animation-iteration-count: infinite;
+                animation-direction: normal;
+                animation-fill-mode: none;
+                animation-play-state: running;
+                animation-name: mymove;
+            }
+            .divpoint2 .title {
+                position: inherit;
+                top: 22px;
+                left: 70px;
+                font-size: 14px;
+                text-align: left;
+                color: #fff;
+                text-shadow: 0 0 9px rgba(0, 0, 0, 0.75);
+            }
+            .divpoint2 .content {
+                position: inherit;
+                font-size: 14px;
+                top: 50px;
+                left: 50px;
+                width: 140px;
+                text-align: left;
+                color: #fff;
+            }
         </style>
     </head>
     <body>
         <div
-            style="position: absolute;
-        z-index: 1;
-        background-color: #fff;
-        padding: 4px;
-        border-radius: 2px;
-        margin: 10px;"
+            style="
+                position: absolute;
+                z-index: 1;
+                background-color: #fff;
+                padding: 4px;
+                border-radius: 2px;
+                margin: 10px;
+            "
         >
             <input
                 type="checkbox"
@@ -45,10 +90,75 @@
                 οnclick="checkboxOnclick(this)"
             />
             <label id="label" for="t">地下管线</label>
+            <br>
+            X:
+            <input id="buttonx-" type="button" value="buttonx-">
+            <input id="buttonx+" type="button" value="buttonx+">
+            <input id="slider-x"  type="range" >
+            <input id="slider-value-x" type="text" >
+
+            <br>
+            Y:
+            <input id="buttony-" type="button" value="buttony-">
+            <input id="buttony+" type="button" value="buttony+">
+            <input id="slider-y" type="range" >
+            <input id="slider-value-y" type="text" >
+            <br>
+            Height:
+            <input id="slider-Height" style="width:300px" type="range" min=-200 max=60 value=0 step=0.1>
+            <input id="slider-value-Height" type="text" >
+            <br>
+            RotateX:
+            <input id="slider-RotateX" style="width:300px" type="range" min=-90 max=90 value=-30 step=0.01>
+            <input id="slider-value-RotateX" type="text" >
+            <br>
+            RotateY:
+            <input id="slider-RotateY" style="width:300px" type="range" min=-90 max=90 value=0 step=0.01>
+            <input id="slider-value-RotateY" type="text" >
+            <br>
+            RotateZ:
+            <input id="slider-RotateZ" style="width:300px" type="range" min=-90 max=90 value=15 step=0.01>
+            <input id="slider-value-RotateZ" type="text" >
+
         </div>
 
         <div id="cesiumContainer"></div>
         <script>
+
+               var params3 = {
+                    tx: 117.20103, //模型中心X轴坐标（经度，单位：十进制度）
+                    ty: 31.85414, //模型中心Y轴坐标（纬度，单位：十进制度）
+                    tz: -8.1, //模型中心Z轴坐标（高程，单位：米）
+                    rx: -29, //X轴（经度）方向旋转角度（单位：度）
+                    ry: 4, //Y轴（纬度）方向旋转角度（单位：度）
+                    rz: 7.64, //Z轴（高程）方向旋转角度（单位：度）
+                }; //旋转
+                var params1 = {
+                    tx: 117.18296, //模型中心X轴坐标（经度，单位：十进制度）
+                    ty: 31.85247, //模型中心Y轴坐标（纬度，单位：十进制度）
+                    tz: -2.6, //模型中心Z轴坐标（高程，单位：米）
+                    rx: -28.76, //X轴（经度）方向旋转角度（单位：度）
+                    ry: 4, //Y轴（纬度）方向旋转角度（单位：度）
+                    rz: 10.16, //Z轴（高程）方向旋转角度（单位：度）
+                }; //旋转
+
+                var params2 = {
+                    tx: 117.1935, //模型中心X轴坐标（经度，单位：十进制度）
+                    ty: 31.85327, //模型中心Y轴坐标（纬度，单位：十进制度）
+                    tz: 41, //模型中心Z轴坐标（高程，单位：米）
+                    rx: 0, //X轴（经度）方向旋转角度（单位：度）
+                    ry: 0, //Y轴（纬度）方向旋转角度（单位：度）
+                    rz: 0, //Z轴（高程）方向旋转角度（单位：度）
+                }; //旋转
+                var params = {
+                    tx: 117.1737, //模型中心X轴坐标（经度，单位：十进制度）
+                    ty: 31.84741, //模型中心Y轴坐标（纬度，单位：十进制度）
+                    tz: -139.91, //模型中心Z轴坐标（高程，单位：米）
+                    rx: 0, //X轴（经度）方向旋转角度（单位：度）
+                    ry: 0, //Y轴（纬度）方向旋转角度（单位：度）
+                    rz: 0, //Z轴（高程）方向旋转角度（单位：度）
+                };
+
             function underground(t, i) {
                 this._viewer = t;
                 var n = Cesium.defaultValue(i, {});
@@ -56,7 +166,7 @@
                     (this._alpha = Cesium.defaultValue(n.alpha, 0.5)),
                     (this.enable = Cesium.defaultValue(n.enable, !1));
             }
-            underground.prototype._updateImageryLayersAlpha = function(e) {
+            underground.prototype._updateImageryLayersAlpha = function (e) {
                 for (
                     var t = this._viewer.imageryLayers._layers,
                         i = 0,
@@ -66,7 +176,7 @@
                 )
                     t[i].alpha = e;
             };
-            underground.prototype._historyOpts = function() {
+            underground.prototype._historyOpts = function () {
                 var e = {};
                 (e.alpha = Cesium.clone(
                     this._viewer.imageryLayers._layers[0] &&
@@ -94,7 +204,7 @@
                         )),
                     (this._oldViewOpts = e);
             };
-            underground.prototype.activate = function() {
+            underground.prototype.activate = function () {
                 if (!this._enable) {
                     (this._enable = !0),
                         this._historyOpts(),
@@ -120,7 +230,7 @@
         e.scene.globe._surface._tileProvider._renderState.blending.functionDestinationRgb = Cesium.BlendFunction.ZERO)*/
                 }
             };
-            underground.prototype.disable = function() {
+            underground.prototype.disable = function () {
                 if (this._enable) {
                     (this._enable = !1),
                         this._updateImageryLayersAlpha(this._oldViewOpts.alpha);
@@ -136,7 +246,7 @@
         void 0 != this._oldViewOpts.blending && (e.scene.globe._surface._tileProvider._renderState.blending = this._oldViewOpts.blending)*/
                 }
             };
-            underground.prototype.destroy = function() {
+            underground.prototype.destroy = function () {
                 delete this._viewer,
                     delete this._alpha,
                     delete this._depth,
@@ -144,7 +254,21 @@
                     delete this._oldViewOpts;
             };
 
-            var viewer = new Cesium.Viewer("cesiumContainer");
+            var viewer = new Cesium.Viewer("cesiumContainer",{infoBox: true,
+                imageryProvider: new Cesium.WebMapTileServiceImageryProvider({
+                url: "http://t0.tianditu.gov.cn/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk=7928d8a53076431e739c24262a0a5828",
+                layer: "img",
+                style: "default",
+                format: "tiles",
+                maximumLevel: 18,
+                tileMatrixSetID: "tdtimgw",
+                show: true
+            })});
+
+            // viewer.terrainProvider = Cesium.createWorldTerrain({
+            //     requestWaterMask : true, // required for water effects
+            //     requestVertexNormals : true // required for terrain lighting
+            // });
 
             function computeCircle(radius) {
                 var positions = [];
@@ -160,7 +284,7 @@
                 return positions;
             }
 
-            gdline.features.forEach(fea => {
+            gdline.features.forEach((fea) => {
                 viewer.entities.add({
                     polylineVolume: {
                         positions: Cesium.Cartesian3.fromDegreesArrayHeights([
@@ -169,149 +293,279 @@
                             -fea.properties["起点高"],
                             fea.geometry.coordinates[0][1][0],
                             fea.geometry.coordinates[0][1][1],
-                            -fea.properties["终点高"]
+                            -fea.properties["终点高"],
                         ]),
                         outline: false,
                         shape: computeCircle(0.5),
-                        material: Cesium.Color.YELLOWGREEN
-                    }
+                        material: Cesium.Color.YELLOWGREEN,
+                    },
                 });
             });
 
-            rqline.features.forEach(fea => {
+            rqline.features.forEach((fea) => {
+                if (fea.geometry.coordinates[0][0][0]) {
+                    viewer.entities.add({
+                        polylineVolume: {
+                            positions: Cesium.Cartesian3.fromDegreesArrayHeights(
+                                [
+                                    fea.geometry.coordinates[0][0][0],
+                                    fea.geometry.coordinates[0][0][1],
+                                    -fea.properties["起点高"],
+                                    fea.geometry.coordinates[0][1][0],
+                                    fea.geometry.coordinates[0][1][1],
+                                    -fea.properties["终点高"],
+                                ]
+                            ),
+                            outline: false,
+                            shape: computeCircle(0.5),
+                            material: Cesium.Color.MEDIUMTURQUOISE,
+                        },
+                    });
+                }
+            });
+
+            gdpoint.features.forEach((fea) => {
                 viewer.entities.add({
-                    polylineVolume: {
-                        positions: Cesium.Cartesian3.fromDegreesArrayHeights([
-                            fea.geometry.coordinates[0][0][0],
-                            fea.geometry.coordinates[0][0][1],
-                            -fea.properties["起点高"],
-                            fea.geometry.coordinates[0][1][0],
-                            fea.geometry.coordinates[0][1][1],
-                            -fea.properties["终点高"]
-                        ]),
-                        outline: false,
-                        shape: computeCircle(0.5),
-                        material: Cesium.Color.MEDIUMTURQUOISE
-                    }
+                    position: Cesium.Cartesian3.fromDegrees(
+                        fea.geometry.coordinates[0],
+                        fea.geometry.coordinates[1],
+                        -fea.properties["HIGH"] + 1
+                    ),
+                    cylinder: {
+                        length: 2.0,
+                        topRadius: 1.0, //圆柱体的顶部半径。
+                        bottomRadius: 1.0, //    圆柱体底部的半径。
+                        material: Cesium.Color.THISTLE,
+                    },
                 });
             });
 
-
-            gdpoint.features.forEach(fea => {
+            rqpoint.features.forEach((fea) => {
                 viewer.entities.add({
-                position : Cesium.Cartesian3.fromDegrees(fea.geometry.coordinates[0], fea.geometry.coordinates[1],-fea.properties["HIGH"]+1),
-                cylinder : {
-                    length : 2.0,
-                    topRadius : 1.0,//圆柱体的顶部半径。
-                    bottomRadius : 1.0,//    圆柱体底部的半径。
-                    material : Cesium.Color.THISTLE
-                }
+                    position: Cesium.Cartesian3.fromDegrees(
+                        fea.geometry.coordinates[0],
+                        fea.geometry.coordinates[1],
+                        -fea.properties["HIGH"] + 1
+                    ),
+                    cylinder: {
+                        length: 2.0,
+                        topRadius: 1.0, //圆柱体的顶部半径。
+                        bottomRadius: 1.0, //    圆柱体底部的半径。
+                        material: Cesium.Color.SANDYBROWN,
+                    },
+                });
             });
-            });
-
-            rqpoint.features.forEach(fea => {
-                viewer.entities.add({
-                position : Cesium.Cartesian3.fromDegrees(fea.geometry.coordinates[0], fea.geometry.coordinates[1],-fea.properties["HIGH"]+1),
-                cylinder : {
-                    length : 2.0,
-                    topRadius : 1.0,//圆柱体的顶部半径。
-                    bottomRadius : 1.0,//    圆柱体底部的半径。
-                    material : Cesium.Color.SANDYBROWN
-                }
-            });
-            });
-
 
             viewer.scene.globe.baseColor = new Cesium.Color(0, 0, 0, 0);
             viewer.scene.globe.depthTestAgainstTerrain = true;
             var ug = new underground(viewer, {
                 depth: 5000,
-                alpha: 0.6
+                alpha: 0.6,
             });
-           //  ug.activate();
-            viewer.zoomTo(viewer.entities);
+            //  ug.activate();
+            //viewer.zoomTo(viewer.entities);
 
-        //     var WGS84_to_Cartesian3 = function(points) {
-        //         return points.map(point => {
-        //             var car33 = Cesium.Cartesian3.fromDegrees(
-        //                 point.x,
-        //                 point.y,
-        //                 point.z
-        //             );
-        //             var x = car33.x;
-        //             var y = car33.y;
-        //             var z = car33.z;
-        //             return { x: x, y: y, z: z };
-        //         });
-        //     };
+            //     var WGS84_to_Cartesian3 = function(points) {
+            //         return points.map(point => {
+            //             var car33 = Cesium.Cartesian3.fromDegrees(
+            //                 point.x,
+            //                 point.y,
+            //                 point.z
+            //             );
+            //             var x = car33.x;
+            //             var y = car33.y;
+            //             var z = car33.z;
+            //             return { x: x, y: y, z: z };
+            //         });
+            //     };
 
-        //   let terrainClipPlan = new Cesium.TerrainClipPlan(viewer, {
-        //             height: 30,
-        //              splitNum: 50,
-        //              wallImg: "../Source/Images/excavate_side_min.jpg",
-        //              bottomImg: "../Source/Images/excavate_bottom_min.jpg",
-        //              positions:WGS84_to_Cartesian3([{ x: 119.83898685700001, y: 32.940516437000042, z: 10 },
-        //          { x: 119.84108701800005, y:32.94068, z: 10 },
-        //          { x: 119.84148717, y: 32.9384185, z: 10  },
-        //          { x: 119.840304803, y: 32.9382428, z: 10  }])
-        //          })
+            //   let terrainClipPlan = new Cesium.TerrainClipPlan(viewer, {
+            //             height: 30,
+            //              splitNum: 50,
+            //              wallImg: "../Source/Images/excavate_side_min.jpg",
+            //              bottomImg: "../Source/Images/excavate_bottom_min.jpg",
+            //              positions:WGS84_to_Cartesian3([{ x: 119.83898685700001, y: 32.940516437000042, z: 10 },
+            //          { x: 119.84108701800005, y:32.94068, z: 10 },
+            //          { x: 119.84148717, y: 32.9384185, z: 10  },
+            //          { x: 119.840304803, y: 32.9382428, z: 10  }])
+            //          })
 
-            let tileset3dmodel = viewer.scene.primitives.add(
-                new Cesium.Cesium3DTileset({
-                    url: "http://localhost:8887/cesium/3dmodel/tileset.json"
-                })
-            );
-            viewer.scene.primitives.add(tileset3dmodel);
-            tileset3dmodel.readyPromise
-                .then(function(tileset) {
-                    viewer.scene.primitives.add(tileset);
-                    //平移、贴地、旋转模型
-                    var cartographic = Cesium.Cartographic.fromCartesian(
-                        tileset.boundingSphere.center
-                    );
-                    var surface = Cesium.Cartesian3.fromRadians(
-                        cartographic.longitude,
-                        cartographic.latitude,
-                        cartographic.height
-                    );
-                    var offset = Cesium.Cartesian3.fromRadians(
-                        cartographic.longitude,
-                        cartographic.latitude,
-                        8
-                    );
-                    var translation = Cesium.Cartesian3.subtract(
-                        offset,
-                        surface,
-                        new Cesium.Cartesian3()
-                    );
-                    tileset.modelMatrix = Cesium.Matrix4.fromTranslation(
-                        translation
-                    );
-                })
+            // let tileset3dmodel1 = viewer.scene.primitives.add(
+            //     new Cesium.Cesium3DTileset({
+            //         url: "http://localhost:8887/cesium/3dmodel1/tileset.json",
+            //     })
+            // );
 
+            // tileset3dmodel1.style = new Cesium.Cesium3DTileStyle({
+            //     show: true,
+            // });
+            // viewer.scene.primitives.add(tileset3dmodel1);
+            // tileset3dmodel1.readyPromise.then(function (tileset) {
+            //     viewer.scene.primitives.add(tileset);
+            //     update3dtilesMaxtrix(tileset3dmodel1,params1);
+            // });
+            // Information about the currently selected feature
+            var selected = {
+                feature: undefined,
+                originalColor: new Cesium.Color()
+            };
+
+            var highlighted = {
+                feature : undefined,
+                originalColor : new Cesium.Color()
+            };
+
+            // An entity object which will hold info about the currently selected feature for infobox display
+            var selectedEntity = new Cesium.Entity();
+
+            var silhouetteGreen = Cesium.PostProcessStageLibrary.createEdgeDetectionStage();
+            silhouetteGreen.uniforms.color = Cesium.Color.LIME;
+            silhouetteGreen.uniforms.length = 0.01;
+            silhouetteGreen.selected = [];
+
+            var silhouetteBlue = Cesium.PostProcessStageLibrary.createEdgeDetectionStage();
+            silhouetteBlue.uniforms.color = Cesium.Color.BLUE;
+            silhouetteBlue.uniforms.length = 0.01;
+            silhouetteBlue.selected = [];
+
+            var clickHandler = viewer.screenSpaceEventHandler.getInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
+            viewer.screenSpaceEventHandler.setInputAction(function onLeftClick(movement) {
+            // If a feature was previously selected, undo the highlight
+            if (Cesium.defined(selected.feature)) {
+                selected.feature.color = selected.originalColor;
+                selected.feature = undefined;
+            }
+            // Pick a new feature
+            var pickedFeature = viewer.scene.pick(movement.position);
+            if (!Cesium.defined(pickedFeature)) {
+                clickHandler(movement);
+                return;
+            }
+            // Select the feature if it's not already selected
+            if (selected.feature === pickedFeature) {
+                return;
+            }
+            selected.feature = pickedFeature;
+            // Save the selected feature's original color
+            if (pickedFeature === highlighted.feature) {
+                Cesium.Color.clone(highlighted.originalColor, selected.originalColor);
+                highlighted.feature = undefined;
+            } else {
+                Cesium.Color.clone(pickedFeature.color, selected.originalColor);
+            }
+            // Highlight newly selected feature
+            pickedFeature.color = Cesium.Color.LIME;
+            // Set feature infobox description
+            var featureName = pickedFeature.getProperty('name');
+            selectedEntity.name = featureName;
+            selectedEntity.description = 'Loading <div class="cesium-infoBox-loading"></div>';
+            viewer.selectedEntity = selectedEntity;
+            selectedEntity.description = '<table class="cesium-infoBox-defaultTable"><tbody>' +
+                                        '<tr><th>文件名</th><td>' + pickedFeature.getProperty('file') + '</td></tr>' +
+                                        '<tr><th>名称</th><td>' + pickedFeature.getProperty('name') + '</td></tr>' +
+                                        '<tr><th>ID</th><td>' + pickedFeature.getProperty('id') + '</td></tr>' +
+                                        '</tbody></table>';
+        }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+
+            // let tilesetdlmodel = viewer.scene.primitives.add(
+            //     new Cesium.Cesium3DTileset({
+            //         url: "http://localhost:8887/cesium/dx2/tileset.json",
+            //         maximumScreenSpaceError: 2,
+            //         maximumMemoryUsage: 4096,
+            //         cullWithChildrenBounds: false,
+            //         luminanceAtZenith: 0.6,
+            //         skipLevels:15
+            //     })
+            // );
+
+            // tilesetdlmodel.style = new Cesium.Cesium3DTileStyle({
+            //     show: true,
+            //     maximumMemoryUsage: 4096,
+            // });
+            // viewer.scene.primitives.add(tilesetdlmodel);
+            // tilesetdlmodel.readyPromise.then(function (tileset) {
+            //     viewer.scene.primitives.add(tileset);
+            //     viewer.zoomTo(
+            //         tileset,
+            //         new Cesium.HeadingPitchRange(
+            //             0.5,
+            //             -0.2,
+            //             tileset.boundingSphere.radius * 1.0
+            //         )
+            //     );
+            //    // update3dtilesMaxtrix(tilesetdlmodel,params);
+            // });
+
+            // let tileset3dmodel3 = viewer.scene.primitives.add(
+            //     new Cesium.Cesium3DTileset({
+            //         url: "http://localhost:8887/cesium/8models1/tileset.json",
+            //     })
+            // );
+
+            // tileset3dmodel3.style = new Cesium.Cesium3DTileStyle({
+            //     show: true,
+            // });
+            // viewer.scene.primitives.add(tileset3dmodel3);
+            // tileset3dmodel3.readyPromise.then(function (tileset) {
+            //     viewer.scene.primitives.add(tileset);
+            //     viewer.zoomTo(
+            //         tileset,
+            //         new Cesium.HeadingPitchRange(
+            //             0.5,
+            //             -0.2,
+            //             tileset.boundingSphere.radius * 1.0
+            //         )
+            //     );
+            //                 平移、贴地、旋转模型
+            //         var cartographic = Cesium.Cartographic.fromCartesian(
+            //             tileset.boundingSphere.center
+            //         );
+            //         var surface = Cesium.Cartesian3.fromRadians(
+            //             cartographic.longitude,
+            //             cartographic.latitude,
+            //             cartographic.height
+            //         );
+            //         var offset = Cesium.Cartesian3.fromRadians(
+            //             cartographic.longitude,
+            //             cartographic.latitude,
+            //             149
+            //         );
+            //         var translation = Cesium.Cartesian3.subtract(
+            //             offset,
+            //             surface,
+            //             new Cesium.Cartesian3()
+            //         );
+            //         tileset.modelMatrix = Cesium.Matrix4.fromTranslation(
+            //             translation
+            //         );
+            //     update3dtilesMaxtrix(tileset3dmodel3,params3);
+            // });
 
             let tileset = viewer.scene.primitives.add(
                 new Cesium.Cesium3DTileset({
-                    url: "http://localhost:8887/cesium/tileset.json"
+                    url: "http://localhost:8887/cesium/tileset.json",
                 })
             );
 
-
-
-
             var myStyle = new Cesium.Cesium3DTileStyle({
                 color: "color('#FFFFFF', 0.06)", //white, alpha = 0.2
-                show: true
+                show: true,
             });
-
-
 
             viewer.scene.primitives.add(tileset);
 
             tileset.readyPromise
-                .then(function(tileset) {
+                .then(function (tileset) {
                     viewer.scene.primitives.add(tileset);
-                    // viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0.5, -0.2, tileset.boundingSphere.radius * 1.0));
+                    viewer.zoomTo(
+                                    tileset,
+                                    new Cesium.HeadingPitchRange(
+                                        0.5,
+                                        -0.2,
+                                        tileset.boundingSphere.radius * 1.0
+                                    )
+                                );
                     //平移、贴地、旋转模型
                     var cartographic = Cesium.Cartographic.fromCartesian(
                         tileset.boundingSphere.center
@@ -336,32 +590,32 @@
                     );
                     //update3dtilesMaxtrix(tileset);
                 })
-                .otherwise(function(error) {
+                .otherwise(function (error) {
                     console.log(error);
                 });
 
-                viewer.clock.onTick.addEventListener(function () {        
-                    if(viewer.camera.pitch > 0){
-                        viewer.scene.screenSpaceCameraController.enableTilt = false;
-                    }
-                }); 
-                
-                var mousePosition,startMousePosition;
-                var handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas);
-                handler.setInputAction(function(movement) { 
-                    mousePosition=startMousePosition= Cesium.Cartesian3.clone(movement.position);
-                    handler.setInputAction(function(movement) {
-                        mousePosition = movement.endPosition;
-                        var y = mousePosition.y - startMousePosition.y;
-                        if(y>0){
-                            viewer.scene.screenSpaceCameraController.enableTilt = true;
-                        }
-                    }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
-                }, Cesium.ScreenSpaceEventType.MIDDLE_DOWN);
-
+            viewer.clock.onTick.addEventListener(function () {
+                if (viewer.camera.pitch > 0) {
+                    viewer.scene.screenSpaceCameraController.enableTilt = false;
+                }
+            });
+            var mousePosition, startMousePosition;
+            var handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas);
+            handler.setInputAction(function (movement) {
+                mousePosition = startMousePosition = Cesium.Cartesian3.clone(
+                    movement.position
+                );
+                handler.setInputAction(function (movement) {
+                    mousePosition = movement.endPosition;
+                    var y = mousePosition.y - startMousePosition.y;
+                    if (y > 0) {
+                        viewer.scene.screenSpaceCameraController.enableTilt = true;
+                    }
+                }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+            }, Cesium.ScreenSpaceEventType.MIDDLE_DOWN);
 
             var inputELe = document.getElementById("undergroundchk"); //input元素
-            inputELe.addEventListener("change", function(e) {
+            inputELe.addEventListener("change", function (e) {
                 //给label添加事件
                 if (e.target.checked) {
                     //如果当前是选中状态
@@ -374,6 +628,157 @@
                     //  e.target.checked = true //否则置为true
                 }
             });
+            var html = `
+                <div class="title">一级警报</div>
+                    <div class="content">入室抢劫案件 <br>01-10 13:18:08</div>
+                            `;
+            var divPoint = new Cesium.DivPoint(viewer, {
+                html: html,
+                position: Cesium.Cartesian3.fromDegrees(
+                    119.839101270000015,
+                    32.939339346000054,
+                    1
+                ),
+                anchor: [0, -15],
+                noEvent: true,
+            });
+
+            var buttonx1 = document.getElementById("buttonx-");
+            var buttonx2 = document.getElementById("buttonx+");
+            var buttonx3 = document.getElementById("buttony-");
+            var buttonx4 = document.getElementById("buttony+");
+            var sliderx = document.getElementById("slider-x");
+            var sliderValuex = document.getElementById("slider-value-x");
+            var slidery = document.getElementById("slider-y");
+            var sliderValuey = document.getElementById("slider-value-y");
+            var sliderHeight = document.getElementById("slider-Height");
+            var sliderValueHeight = document.getElementById(
+                "slider-value-Height"
+            );
+            var sliderRotateX = document.getElementById("slider-RotateX");
+            var sliderValueRotateX = document.getElementById(
+                "slider-value-RotateX"
+            );
+            var sliderRotateY = document.getElementById("slider-RotateY");
+            var sliderValueRotateY = document.getElementById(
+                "slider-value-RotateY"
+            );
+            var sliderRotateZ = document.getElementById("slider-RotateZ");
+            var sliderValueRotateZ = document.getElementById(
+                "slider-value-RotateZ"
+            );
+
+            function update3dtilesMaxtrix(tileset,params) {
+
+                //旋转
+
+                var mx = Cesium.Matrix3.fromRotationX(Cesium.Math.toRadians(params.rx));
+                var my = Cesium.Matrix3.fromRotationY(Cesium.Math.toRadians(params.ry));
+                var mz = Cesium.Matrix3.fromRotationZ(Cesium.Math.toRadians(params.rz));
+                var rotationX = Cesium.Matrix4.fromRotationTranslation(mx);
+                var rotationY = Cesium.Matrix4.fromRotationTranslation(my);
+                var rotationZ = Cesium.Matrix4.fromRotationTranslation(mz);
+                //平移
+
+                var position = Cesium.Cartesian3.fromDegrees(params.tx, params.ty, params.tz);
+                var m = Cesium.Transforms.eastNorthUpToFixedFrame(position);
+                //旋转、平移矩阵相乘
+
+                Cesium.Matrix4.multiply(m, rotationX, m);
+                Cesium.Matrix4.multiply(m, rotationY, m);
+                Cesium.Matrix4.multiply(m, rotationZ, m);
+
+                //赋值给tileset
+                tileset._root.transform = m;
+
+            }
+            window.onload = function () {
+                buttonx1.addEventListener("click", function (e) {
+                    params.tx = params.tx - 0.00001;
+                    if (isNaN(params.tx)) {
+                        return;
+                    }
+                    sliderValuex.value = params.tx;
+                    update3dtilesMaxtrix(tilesetdlmodel,params);
+                });
+                buttonx2.addEventListener("click", function (e) {
+                    params.tx = params.tx + 0.00001;
+                    if (isNaN(params.tx)) {
+                        return;
+                    }
+                    sliderValuex.value = params.tx;
+                    update3dtilesMaxtrix(tilesetdlmodel,params);
+                });
+                sliderx.addEventListener("input", function (e) {
+                    sliderValuex.value = e.target.value;
+                    params.tx = Number(e.target.value);
+                    if (isNaN(params.tx)) {
+                        return;
+                    }
+                    update3dtilesMaxtrix(tilesetdlmodel);
+                });
+
+                buttonx3.addEventListener("click", function (e) {
+                    params.ty = params.ty - 0.00001;
+                    if (isNaN(params.ty)) {
+                        return;
+                    }
+                    sliderValuey.value = params.ty;
+                    update3dtilesMaxtrix(tilesetdlmodel,params);
+                });
+                buttonx4.addEventListener("click", function (e) {
+                    params.ty = params.ty + 0.00001;
+                    if (isNaN(params.ty)) {
+                        return;
+                    }
+                    sliderValuey.value = params.ty;
+                    update3dtilesMaxtrix(tilesetdlmodel,params);
+                });
+                slidery.addEventListener("input", function (e) {
+                    sliderValuey.value = e.target.value;
+                    params.ty = Number(e.target.value);
+                    if (isNaN(params.ty)) {
+                        return;
+                    }
+                    update3dtilesMaxtrix(tilesetdlmodel);
+                });
+
+                sliderHeight.addEventListener("input", function (e) {
+                    sliderValueHeight.value = e.target.value;
+                    params.tz = Number(e.target.value);
+                    if (isNaN(params.tz)) {
+                        return;
+                    }
+                    update3dtilesMaxtrix(tilesetdlmodel,params);
+                });
+
+                sliderRotateX.addEventListener("input", function (e) {
+                    sliderValueRotateX.value = e.target.value;
+                    params.rx = Number(e.target.value);
+                    if (isNaN(params.rx)) {
+                        return;
+                    }
+                    update3dtilesMaxtrix(tilesetdlmodel);
+                });
+
+                sliderRotateY.addEventListener("input", function (e) {
+                    sliderValueRotateY.value = e.target.value;
+                    params.ry = Number(e.target.value);
+                    if (isNaN(params.ry)) {
+                        return;
+                    }
+                    update3dtilesMaxtrix(tilesetdlmodel);
+                });
+
+                sliderRotateZ.addEventListener("input", function (e) {
+                    sliderValueRotateZ.value = e.target.value;
+                    params.rz = Number(e.target.value);
+                    if (isNaN(params.rz)) {
+                        return;
+                    }
+                    update3dtilesMaxtrix(tilesetdlmodel);
+                });
+            };
         </script>
     </body>
 </html>
