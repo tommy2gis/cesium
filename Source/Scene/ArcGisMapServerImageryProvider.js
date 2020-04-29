@@ -93,6 +93,10 @@ import ImageryProvider from './ImageryProvider.js';
         var resource = Resource.createIfNeeded(options.url);
         resource.appendForwardSlash();
 
+        if (defined(options.headers)) {
+            resource.headers=options.headers;
+        }
+
         if (defined(options.token)) {
             resource.setQueryParameters({
                 token: options.token
