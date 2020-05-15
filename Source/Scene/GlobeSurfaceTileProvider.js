@@ -49,6 +49,7 @@ import TerrainFillMesh from "./TerrainFillMesh.js";
 import TerrainState from "./TerrainState.js";
 import TileBoundingRegion from "./TileBoundingRegion.js";
 import TileSelectionResult from "./TileSelectionResult.js";
+import ExpandBySwsk from '../Swsk/ExpandBySwsk';
 
 /**
  * Provides quadtree tiles representing the surface of the globe.  This type is intended to be used
@@ -2387,7 +2388,7 @@ function addDrawCommandsForTile(tileProvider, tile, frameState) {
       surfaceTile.vertexArray || surfaceTile.fill.vertexArray;
     command.count = count;
     command.uniformMap = uniformMap;
-    command.pass = Pass.GLOBE;
+    command.pass = ExpandBySwsk.underEarth.enable?Pass.TRANSLUCENT:Pass.GLOBE;
 
     if (tileProvider._debug.wireframe) {
       createWireframeVertexArrayIfNecessary(context, tileProvider, tile);

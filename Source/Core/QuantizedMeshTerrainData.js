@@ -13,6 +13,7 @@ import TaskProcessor from "./TaskProcessor.js";
 import TerrainEncoding from "./TerrainEncoding.js";
 import TerrainMesh from "./TerrainMesh.js";
 
+
 /**
  * Terrain data for a single tile where the terrain data is represented as a quantized mesh.  A quantized
  * mesh consists of three vertex attributes, longitude, latitude, and height.  All attributes are expressed
@@ -306,6 +307,10 @@ QuantizedMeshTerrainData.prototype.createMesh = function (
   var rectangle = tilingScheme.tileXYToRectangle(x, y, level);
   exaggeration = defaultValue(exaggeration, 1.0);
 
+  this._westSkirtHeight=0;
+  this._southSkirtHeight=0;
+  this._eastSkirtHeight=0;
+  this._northSkirtHeight=0;
   var verticesPromise = createMeshTaskProcessor.scheduleTask({
     minimumHeight: this._minimumHeight,
     maximumHeight: this._maximumHeight,

@@ -24,6 +24,7 @@ import MapMode2D from "./MapMode2D.js";
 import SceneMode from "./SceneMode.js";
 import SceneTransforms from "./SceneTransforms.js";
 import TweenCollection from "./TweenCollection.js";
+import ExpandBySwsk from '../Swsk/ExpandBySwsk';
 
 /**
  * Modifies the camera position and orientation based on mouse input to a canvas.
@@ -2531,6 +2532,9 @@ function adjustHeightForTerrain(controller) {
     if (defined(height)) {
       height += controller.minimumZoomDistance;
       if (cartographic.height < height) {
+        if (ExpandBySwsk.underEarth.enable && cartographic.height > (height - ExpandBySwsk.underEarth.enableDepth)){
+          return;
+        }
         cartographic.height = height;
         if (mode === SceneMode.SCENE3D) {
           ellipsoid.cartographicToCartesian(cartographic, camera.position);

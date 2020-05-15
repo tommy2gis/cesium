@@ -237,7 +237,8 @@ HeightmapTerrainData.prototype.createMesh = function (
   );
   var thisLevelMaxError = levelZeroMaxError / (1 << level);
   this._skirtHeight = Math.min(thisLevelMaxError * 4.0, 1000.0);
-
+  this._skirtHeight = 0;
+  
   var verticesPromise = taskProcessor.scheduleTask({
     heightmap: this._buffer,
     structure: structure,
