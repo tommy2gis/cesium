@@ -89,6 +89,10 @@ function WebMapServiceImageryProvider(options) {
 
   var resource = Resource.createIfNeeded(options.url);
 
+  if (defined(options.headers)) {
+    resource.headers=options.headers; 
+  }
+
   var pickFeatureResource = resource.clone();
 
   resource.setQueryParameters(
