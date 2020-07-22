@@ -893,6 +893,15 @@ function Cesium3DTileset(options) {
       var basePath;
       resource = Resource.createIfNeeded(url);
 
+      if (defined(options.headers)) {
+        resource.headers=options.headers;
+      }
+    
+      if (defined(options.token)) {
+        resource.setQueryParameters({
+          token: options.token,
+        });
+      }
       // ion resources have a credits property we can use for additional attribution.
       that._credits = resource.credits;
 
