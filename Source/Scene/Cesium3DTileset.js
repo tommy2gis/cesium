@@ -144,6 +144,7 @@ function Cesium3DTileset(options) {
   this._url = undefined;
   this._basePath = undefined;
   this._root = undefined;
+  this._resource = undefined;
   this._asset = undefined; // Metadata for the entire tileset
   this._properties = undefined; // Metadata for per-model/point/etc properties
   this._geometricError = undefined; // Geometric error when the tree is not rendered at all
@@ -903,6 +904,7 @@ function Cesium3DTileset(options) {
     .then(function (url) {
       var basePath;
       resource = Resource.createIfNeeded(url);
+      that._resource = resource;
 
       // ion resources have a credits property we can use for additional attribution.
       that._credits = resource.credits;
@@ -1170,10 +1172,29 @@ Object.defineProperties(Cesium3DTileset.prototype, {
    *
    * @type {String}
    * @readonly
+   * @deprecated
    */
   url: {
     get: function () {
+      deprecationWarning(
+        "Cesium3DTileset.url",
+        "Cesium3DTileset.url has been deprecated and will be removed in CesiumJS 1.79.  Instead, use Cesium3DTileset.resource.url to retrieve the url value."
+      );
       return this._url;
+    },
+  },
+
+  /**
+   * The resource used to fetch the tileset JSON file
+   *
+   * @memberof Cesium3DTileset.prototype
+   *
+   * @type {Resource}
+   * @readonly
+   */
+  resource: {
+    get: function () {
+      return this._resource;
     },
   },
 
@@ -1697,6 +1718,7 @@ Cesium3DTileset.prototype.loadTileset = function (
   if (defined(tilesetVersion)) {
     // Append the tileset version to the resource
     this._basePath += "?v=" + tilesetVersion;
+    resource = resource.clone();
     resource.setQueryParameters({ v: tilesetVersion });
   }
 
@@ -1892,6 +1914,7 @@ Cesium3DTileset.prototype.postPassesUpdate = function (frameState) {
   cancelOutOfViewRequests(this, frameState);
   raiseLoadProgressEvent(this, frameState);
   this._cache.unloadTiles(this, unloadTile);
+  this._styleEngine.resetDirty();
 };
 
 /**
@@ -2173,7 +2196,7 @@ function updateTileDebugLabels(tileset, frameState) {
 }
 
 function updateTiles(tileset, frameState, passOptions) {
-  tileset._styleEngine.applyStyle(tileset, passOptions);
+  tileset._styleEngine.applyStyle(tileset);
 
   var isRender = passOptions.isRender;
   var statistics = tileset._statistics;
