@@ -8,6 +8,7 @@ import deprecationWarning from "../Core/deprecationWarning.js";
 import destroyObject from "../Core/destroyObject.js";
 import DeveloperError from "../Core/DeveloperError.js";
 import Ellipsoid from "../Core/Ellipsoid.js";
+import getJsonFromTypedArray from "../Core/getJsonFromTypedArray.js";
 import getStringFromTypedArray from "../Core/getStringFromTypedArray.js";
 import Matrix3 from "../Core/Matrix3.js";
 import Matrix4 from "../Core/Matrix4.js";
@@ -52,6 +53,7 @@ function Instanced3DModel3DTileContent(
   this._features = undefined;
 
   this.featurePropertiesDirty = false;
+  this._groupMetadata = undefined;
 
   initialize(this, arrayBuffer, byteOffset);
 }
@@ -143,6 +145,15 @@ Object.defineProperties(Instanced3DModel3DTileContent.prototype, {
       return this._batchTable;
     },
   },
+
+  groupMetadata: {
+    get: function () {
+      return this._groupMetadata;
+    },
+    set: function (value) {
+      this._groupMetadata = value;
+    },
+  },
 });
 
 function getPickIdCallback(content) {
@@ -203,12 +214,11 @@ function initialize(content, arrayBuffer, byteOffset) {
   }
   byteOffset += sizeOfUint32;
 
-  var featureTableString = getStringFromTypedArray(
+  var featureTableJson = getJsonFromTypedArray(
     uint8Array,
     byteOffset,
     featureTableJsonByteLength
   );
-  var featureTableJson = JSON.parse(featureTableString);
   byteOffset += featureTableJsonByteLength;
 
   var featureTableBinary = new Uint8Array(
@@ -234,12 +244,11 @@ function initialize(content, arrayBuffer, byteOffset) {
   var batchTableJson;
   var batchTableBinary;
   if (batchTableJsonByteLength > 0) {
-    var batchTableString = getStringFromTypedArray(
+    batchTableJson = getJsonFromTypedArray(
       uint8Array,
       byteOffset,
       batchTableJsonByteLength
     );
-    batchTableJson = JSON.parse(batchTableString);
     byteOffset += batchTableJsonByteLength;
 
     if (batchTableBinaryByteLength > 0) {
@@ -305,6 +314,7 @@ function initialize(content, arrayBuffer, byteOffset) {
     sphericalHarmonicCoefficients: tileset.sphericalHarmonicCoefficients,
     specularEnvironmentMaps: tileset.specularEnvironmentMaps,
     backFaceCulling: tileset.backFaceCulling,
+    showOutline: tileset.showOutline,
   };
 
   if (gltfFormat === 0) {
